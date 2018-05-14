@@ -476,6 +476,8 @@ DaMiR.EnsembleLearning2cl <- function(data,
       FN.Class <- acc.Class
       Sensit.Class <- acc.Class
       Specif.Class <- acc.Class
+	  #PPV.Class <- acc.Class
+      #NPV.Class <- acc.Class
 
     }
 
@@ -502,10 +504,17 @@ DaMiR.EnsembleLearning2cl <- function(data,
       MCC.Class[jj,] <- (TP_Class * TN_Class - FP_Class * FN_Class) /
         sqrt((TP_Class + FP_Class) * (TP_Class + FN_Class) *
                (TN_Class + FP_Class) * (TN_Class + FN_Class))
-      Sensit.Class[jj,] <- TP_Class /
-        length(which(testSetClasses == levels(testSetClasses)[1]))
-      Specif.Class[jj,] <- TN_Class /
-        length(which(testSetClasses == levels(testSetClasses)[2]))
+  # Sensit.Class[jj,] <- TP_Class /
+  #   length(which(testSetClasses == levels(testSetClasses)[1]))
+  # Specif.Class[jj,] <- TN_Class /
+  #   length(which(testSetClasses == levels(testSetClasses)[2]))
+  
+  Sensit.Class[jj,] <- TP_Class / (TP_Class + FN_Class)
+  Specif.Class[jj,] <- TN_Class / (TN_Class + FP_Class)
+  
+  
+  #PPV.Class[jj,] <- TP_Class / (TP_Class + FP_Class)
+  #NPV.Class[jj,] <- TN_Class / (TN_Class + FN_Class)
 
   }
 
@@ -624,6 +633,18 @@ DaMiR.EnsembleLearning2cl <- function(data,
       "\n",
       "Mean:",round(colMeans(Sensit.Class),2),"\n","St.Dev.",
       round(colSds(Sensit.Class),digits = 1),"\n")
+#  cat("PPV:",
+#      "\n",
+#      colnames(PPV.Class),
+#      "\n",
+#      "Mean:",round(colMeans(PPV.Class),2),"\n","St.Dev.",
+#      round(colSds(PPV.Class),digits = 2),"\n")
+#  cat("NPV:",
+#      "\n",
+#      colnames(NPV.Class),
+#      "\n",
+#      "Mean:",round(colMeans(NPV.Class),2),"\n","St.Dev.",
+#      round(colSds(NPV.Class),digits = 2),"\n")	
 
    return(list(accuracy = acc.Class,
                MCC = MCC.Class,
